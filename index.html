@@ -3,43 +3,501 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Creative Agent</title>
+  <title>AI Creative Agent Team</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <script>
+    (function () {
+      var G = "https://fonts.googleapis.com/css2?display=swap&family=";
+      var FONTS = {
+        glass: [G + "Instrument+Serif:ital@0;1"],
+        swiss: [G + "Inter+Tight:wght@500;700;900"],
+        brutal: [G + "Black+Han+Sans&family=Space+Grotesk:wght@500;700"],
+        terminal: [G + "JetBrains+Mono:wght@400;700&family=Nanum+Gothic+Coding:wght@400;700"],
+        magazine: [G + "Noto+Serif+KR:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400"],
+        clay: [G + "Jua&family=Fredoka:wght@500;600"],
+        y2k: [G + "Orbit&family=Unbounded:wght@600;800"],
+        scrapbook: [G + "Gaegu:wght@400;700&family=Gowun+Dodum"],
+        aurora: [G + "Space+Grotesk:wght@400;700"],
+        dashboard: [G + "Geist+Mono:wght@400;600"],
+        pixel: ["https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css", G + "Press+Start+2P"],
+        hanji: [G + "Nanum+Myeongjo:wght@400;800&family=Cormorant+Garamond:ital,wght@1,500"]
+      };
+      var keys = Object.keys(FONTS);
+      var host = location.hostname;
+      var asked = new URLSearchParams(location.search).get("design");
+      var lm = document.lastModified;
+      var seed = host + (Math.abs(Date.now() - Date.parse(lm)) > 3000 ? lm.slice(-2) : "");
+      var h = 0;
+      for (var i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+      var d = keys.indexOf(asked) > -1 ? asked : /\.github\.io$/.test(host) ? keys[h % keys.length] : "";
+      if (!d) return;
+      document.documentElement.setAttribute("data-design", d);
+      FONTS[d].forEach(function (href) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+      });
+    })();
+  </script>
+  <style>
+    :root { --bg: #F4F4F5; --bg-art: none; --ink: #18181B; --muted: #6B6B74; --line: #D4D4D8; --card: #FFFFFF; --accent: #18181B; --accent-2: #8B8B94; --accent-soft: #ECECEF; --on-accent: #FFFFFF; --radius: 12px; --border: 1px dashed var(--line); --shadow: none; --blur: none; --tilt: 0deg; --align: center; --hero-cols: 1fr; --font-body: 'Pretendard Variable', -apple-system, sans-serif; --font-display: 'Pretendard Variable', -apple-system, sans-serif; --title-weight: 800; --title-tracking: -0.03em; }
+    html[data-design="glass"] { --bg: #F7F7FB; --bg-art: radial-gradient(circle at 20% 20%, rgba(142,162,255,.4), transparent 40%), radial-gradient(circle at 80% 80%, rgba(255,179,217,.4), transparent 40%); --ink: #14142B; --muted: #6B6B80; --line: rgba(255,255,255,.7); --card: rgba(255,255,255,.55); --accent: #7B61FF; --accent-2: #6E8BFF; --accent-soft: rgba(123,97,255,.12); --radius: 36px; --border: 1px solid rgba(255,255,255,.7); --shadow: 0 30px 80px -30px rgba(76,70,160,.25); --blur: blur(24px) saturate(160%); --font-body: 'Pretendard Variable', sans-serif; --font-display: 'Instrument Serif', serif; }
+    html[data-design="swiss"] { --bg: #FFFFFF; --ink: #111111; --muted: #666; --line: #111111; --card: #FFFFFF; --accent: #E30613; --accent-2: #111111; --accent-soft: #F2F2F2; --radius: 0; --border: 1px solid #111; --hero-cols: 1.2fr 1fr; --font-body: 'Inter Tight', 'Pretendard Variable', sans-serif; --font-display: 'Inter Tight', sans-serif; --title-weight: 900; }
+    html[data-design="brutal"] { --bg: #FFE14D; --ink: #000000; --muted: #333; --line: #000000; --card: #FFFFFF; --accent: #000000; --accent-2: #7FD3FF; --accent-soft: #FF8FC7; --radius: 0; --border: 3px solid #000; --shadow: 6px 6px 0 #000; --font-body: 'Space Grotesk', 'Pretendard Variable', sans-serif; --font-display: 'Black Han Sans', sans-serif; }
+    html[data-design="terminal"] { --bg: #0B0F0C; --ink: #D9FFE8; --muted: #7FB89A; --line: #1C3322; --card: #121A15; --accent: #39FF88; --accent-2: #FFB000; --accent-soft: rgba(57,255,136,.1); --radius: 4px; --border: 1px solid #39FF88; --font-body: 'JetBrains Mono', 'Nanum Gothic Coding', monospace; --font-display: 'JetBrains Mono', monospace; }
+    html[data-design="magazine"] { --bg: #F4EFE6; --ink: #1C1A17; --muted: #6B5F55; --line: #B23A2A; --card: #FAF7F0; --accent: #B23A2A; --accent-2: #1C1A17; --accent-soft: #EFE8DA; --radius: 0; --border: 1px solid #B23A2A; --hero-cols: 1.1fr 1fr; --font-body: 'Noto Serif KR', serif; --font-display: 'Playfair Display', serif; }
+    html[data-design="clay"] { --bg: #FFF6EC; --ink: #4A3530; --muted: #8A6E65; --line: #E8D0C0; --card: #FFFFFF; --accent: #FF9B7A; --accent-2: #9FE3C8; --accent-soft: #FFE8DF; --radius: 32px; --border: 2px solid #F5DCB0; --shadow: inset -8px -10px 16px rgba(0,0,0,.04), inset 8px 10px 16px rgba(255,255,255,.8), 0 14px 24px -12px rgba(120,80,60,.2); --font-body: 'Fredoka', 'Pretendard Variable', sans-serif; --font-display: 'Jua', sans-serif; }
+    html[data-design="y2k"] { --bg: #7EC8FF; --ink: #1B2440; --muted: #5B6B8C; --line: #5B6B8C; --card: #F2F4F8; --accent: #FF7AD9; --accent-2: #7AF0E0; --accent-soft: #D4ECFF; --radius: 6px; --border: 1px solid #5B6B8C; --shadow: 4px 6px 0 rgba(30,50,90,.35); --font-body: 'Orbit', 'Pretendard Variable', sans-serif; --font-display: 'Unbounded', sans-serif; }
+    html[data-design="scrapbook"] { --bg: #FBFAF5; --bg-art: linear-gradient(#E3E7EE 1px, transparent 1px), linear-gradient(90deg, #E3E7EE 1px, transparent 1px); background-size: 18px 18px; --ink: #2B2B2B; --muted: #666; --line: #D0D5DD; --card: #FFFFFF; --accent: #E2574C; --accent-2: #FFF176; --accent-soft: #FFF9C4; --radius: 4px; --border: 1px solid #D0D5DD; --shadow: 2px 4px 12px rgba(0,0,0,.06); --tilt: -0.5deg; --font-body: 'Gowun Dodum', 'Pretendard Variable', sans-serif; --font-display: 'Gaegu', cursive; }
+    html[data-design="aurora"] { --bg: #070B1F; --bg-art: radial-gradient(circle at 50% 20%, rgba(76,255,178,.15), transparent 50%), radial-gradient(circle at 80% 80%, rgba(138,108,255,.15), transparent 50%); --ink: #EAF2FF; --muted: #A3AED6; --line: rgba(76,255,178,.2); --card: rgba(15,23,48,.8); --accent: #4CFFB0; --accent-2: #8A6CFF; --accent-soft: rgba(76,255,178,.1); --radius: 20px; --border: 1px solid rgba(76,255,178,.3); --shadow: 0 0 40px rgba(76,255,178,.15); --blur: blur(16px); --font-body: 'Space Grotesk', 'Pretendard Variable', sans-serif; --font-display: 'Space Grotesk', sans-serif; }
+    html[data-design="dashboard"] { --bg: #F5F6F8; --ink: #111827; --muted: #6B7280; --line: #E5E7EB; --card: #FFFFFF; --accent: #2563EB; --accent-2: #4F46E5; --accent-soft: #EFF6FF; --radius: 12px; --border: 1px solid #E5E7EB; --shadow: 0 1px 3px rgba(0,0,0,.05); --font-body: 'Pretendard Variable', sans-serif; --font-display: 'Geist Mono', monospace; }
+    html[data-design="pixel"] { --bg: #1A1C2C; --ink: #F4F4F4; --muted: #8F97B2; --line: #333C57; --card: #22253F; --accent: #FFCD75; --accent-2: #EF7D57; --accent-soft: rgba(255,205,117,.15); --radius: 0; --border: 3px solid #333C57; --shadow: 4px 4px 0 #11131D; --font-body: 'Galmuri11', sans-serif; --font-display: 'Press Start 2P', monospace; }
+    html[data-design="hanji"] { --bg: #F3EEE3; --ink: #222222; --muted: #6E6A62; --line: #D9D2C1; --card: #FAF6ED; --accent: #2E4A7D; --accent-2: #8C4A32; --accent-soft: rgba(46,74,125,.08); --radius: 2px; --border: 1px solid #D9D2C1; --font-body: 'Nanum Myeongjo', serif; --font-display: 'Cormorant Garamond', serif; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg); background-image: var(--bg-art); color: var(--ink); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
+    
+    .preview-note { background: #111; color: #fff; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; z-index: 1000; }
+    html[data-design] .preview-note { display: none; }
+
+    header.nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: var(--card); border-bottom: var(--border); backdrop-filter: var(--blur); }
+    .brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: var(--title-weight); font-size: 18px; letter-spacing: var(--title-tracking); }
+    .brand-mark { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; }
+    .nav-links { display: flex; gap: 24px; font-size: 14px; font-weight: 600; color: var(--muted); }
+    .nav-links a { color: inherit; text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta { padding: 10px 20px; background: var(--accent); color: var(--on-accent); border: none; border-radius: var(--radius); font-weight: 700; font-size: 14px; cursor: pointer; transition: opacity .2s; }
+    .nav-cta:hover { opacity: .9; }
+
+    section.hero { position: relative; display: grid; grid-template-columns: var(--hero-cols); gap: 40px; max-width: 1320px; margin: 0 auto; padding: 60px 24px; align-items: center; overflow-x: clip; }
+    .hero-copy { display: flex; flex-direction: column; gap: 16px; }
+    .eyebrow { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-family: var(--font-display); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px); font-weight: var(--title-weight); letter-spacing: var(--title-tracking); line-height: 1.1; word-break: keep-all; }
+    .hero-title em { font-style: normal; color: var(--accent); }
+    .hero-lead { font-size: 18px; line-height: 1.7; color: var(--muted); word-break: keep-all; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; font-family: monospace; color: var(--muted); margin-top: 12px; }
+
+    .chat-card { background: var(--card); border: var(--border); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: var(--blur); overflow: hidden; display: flex; flex-direction: column; width: 100%; max-width: 860px; margin: 0 auto; position: relative; }
+    .chat-card > * { flex: none; }
+    .chat-card > #webchat { height: 200px; min-height: 0; }
+    body.is-started .chat-card { height: calc(100svh - 112px); max-height: 800px; }
+    body.is-started .chat-card > #webchat { flex: 1 1 0; height: auto; min-height: 0; }
+    
+    .chat-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--accent-soft); border-bottom: var(--border); font-size: 13px; font-weight: 600; }
+    .chat-status { display: flex; align-items: center; gap: 8px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #9CA3AF; }
+    body.is-connected .status-dot { background: #10B981; }
+    .chat-reset { background: none; border: none; font: inherit; color: var(--muted); cursor: pointer; }
+    .chat-reset:hover { color: var(--ink); }
+
+    .chat-foot { padding: 16px 20px; background: var(--card); border-top: var(--border); display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { padding: 6px 14px; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line); border-radius: 999px; font-size: 13px; cursor: pointer; transition: all .2s; flex: none; }
+    .chip:hover { background: var(--accent); color: var(--on-accent); }
+
+    .composer { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 16px; position: relative; transition: border-color .2s; }
+    .composer:focus-within { border-color: var(--accent); }
+    .composer textarea { flex: 1; background: none; border: none; outline: none; font: inherit; color: var(--ink); resize: none; max-height: 120px; line-height: 1.5; padding: 4px 0; }
+    .send-btn { background: var(--accent); color: var(--on-accent); border: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: opacity .2s; flex: none; }
+    .send-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .composer-hint { font-size: 11px; color: var(--muted); text-align: center; }
+
+    section.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; max-width: 1320px; margin: 0 auto; padding: 40px 24px; overflow-x: clip; }
+    .stat { background: var(--card); border: var(--border); border-radius: var(--radius); padding: 24px; text-align: center; box-shadow: var(--shadow); }
+    .stat-num { font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+    .stat-label { font-size: 14px; color: var(--muted); font-weight: 600; }
+
+    .section { max-width: 1320px; margin: 0 auto; padding: 80px 24px; scroll-margin-top: 96px; overflow-x: clip; }
+    .section-head { text-align: center; max-width: 700px; margin: 0 auto 60px; display: flex; flex-direction: column; gap: 12px; }
+    .kicker { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-family: var(--font-display); }
+    .section-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 42px); font-weight: var(--title-weight); letter-spacing: var(--title-tracking); word-break: keep-all; }
+    .section-sub { font-size: 16px; line-height: 1.7; color: var(--muted); word-break: keep-all; }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature { background: var(--card); border: var(--border); border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow); transform: rotate(var(--tilt)); transition: transform .3s; }
+    .feature:hover { transform: translateY(-4px) rotate(0deg); }
+    .feature-mock { height: 120px; background: var(--accent-soft); border-radius: 8px; display: grid; place-items: center; font-size: 24px; color: var(--accent); font-family: var(--font-display); }
+    .feature h3 { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+    .feature p { font-size: 14px; line-height: 1.6; color: var(--muted); }
+    .feature-file { margin-top: auto; font-family: monospace; font-size: 12px; background: var(--accent-soft); padding: 6px 10px; border-radius: 6px; width: fit-content; color: var(--accent); }
+
+    ol.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; list-style: none; counter-reset: step; }
+    ol.steps li { counter-increment: step; background: var(--card); border: var(--border); border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); position: relative; }
+    ol.steps li::before { content: "0" counter(step); font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--accent); }
+    ol.steps li h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+    ol.steps li p { font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .swatch { background: var(--card); border: var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .swatch-color { height: 40px; border-radius: 6px; }
+
+    .prompts { overflow: hidden; padding: 40px 0; background: var(--accent-soft); }
+    .marquee { display: flex; gap: 16px; width: max-content; animation: scroll 30s linear infinite; margin-bottom: 12px; }
+    .marquee:nth-child(even) { animation-direction: reverse; }
+    .marquee span { padding: 10px 20px; background: var(--card); border: var(--border); border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    .cta-section { text-align: center; padding: 80px 24px; background: var(--card); border-top: var(--border); border-bottom: var(--border); display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    
+    footer.footer { padding: 40px 24px; text-align: center; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: var(--on-accent); padding: 12px 20px; border-radius: 999px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,.2); display: none; z-index: 1000; animation: bounce 2s infinite; }
+    body.is-working .toast, body.has-result .toast { display: block; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    @property --glow { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    .composer::before { content: ""; position: absolute; inset: -1px; padding: 1.5px; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .6s; background: conic-gradient(from var(--glow), var(--accent), var(--accent-2), var(--accent-soft), var(--accent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: glow-spin 6s linear infinite; }
+    body.is-working .composer::before { opacity: .9; }
+    @keyframes glow-spin { to { --glow: 360deg; } }
+
+    #webchat .webchat__typing-indicator { display: none !important; }
+    #webchat .webchat__stacked-layout:not(.webchat__stacked-layout--from-user) .webchat__stacked-layout__status { display: none; }
+    #webchat .webchat__stacked-layout__attachment-row { margin-top: 8px !important; }
+    #webchat .webchat__stacked-layout__attachment, #webchat .webchat__stacked-layout__attachment .webchat__bubble__content { background: none !important; border: 0 !important; overflow: visible !important; }
+    #webchat .webchat__stacked-layout__content:has(.webchat__fileContent) { overflow: visible !important; }
+    #webchat .webchat__fileContent { padding: 0 !important; }
+    #webchat .webchat__fileContent__buttonLink { display: flex !important; align-items: center; gap: 12px; height: 56px; padding: 0 18px 0 12px; border-radius: var(--radius); text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); }
+    #webchat .webchat__fileContent__buttonLink::before { content: "FILE"; flex: none; padding: 5px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: 600 10.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
+    #webchat a[download$=".pptx" i]::before { content: "PPTX"; } #webchat a[download$=".docx" i]::before { content: "DOCX"; } #webchat a[download$=".xlsx" i]::before { content: "XLSX"; } #webchat a[download$=".html" i]::before { content: "HTML"; }
+    #webchat .webchat__fileContent__badge { flex: 1; min-width: 0; background: none !important; padding: 0 !important; }
+    #webchat .webchat__fileContent__fileName { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace !important; color: var(--ink) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #webchat .webchat__fileContent__downloadIcon { flex: none; box-sizing: content-box; width: 16px; height: 16px; padding: 0; fill: var(--muted); color: var(--muted); }
+
+    #webchat .webchat__render-markdown { word-break: keep-all; overflow-wrap: anywhere; }
+    #webchat .webchat__render-markdown a { color: var(--accent); }
+    #webchat .webchat__render-markdown table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; border-spacing: 0; margin: 12px 0; font-variant-numeric: tabular-nums; }
+    #webchat .webchat__render-markdown th, #webchat .webchat__render-markdown td { padding: 9px 18px 9px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    #webchat .webchat__render-markdown th { font-size: 12px; font-weight: 600; color: var(--muted); }
+
+    .orbit { --r: 150px; position: relative; width: calc(var(--r) * 2); aspect-ratio: 1; margin: 48px auto; overflow: hidden; }
+    .orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed var(--line); animation: orbit-spin 40s linear infinite; }
+    .orbit .agent { position: absolute; left: 50%; top: 50%; transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a))); }
+    .orbit .agent b { position: absolute; translate: -50% -50%; white-space: nowrap; padding: 8px 12px; border-radius: 999px; font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); background: var(--card); border: 1px solid var(--line); animation: orbit-spin 40s linear infinite reverse; }
+    .orbit .leader { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 112px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--accent); color: var(--on-accent); }
+    @keyframes orbit-spin { to { rotate: 360deg; } }
+    @media (max-width: 600px) { .orbit { --r: 100px; } .orbit .agent b { font-size: 10px; padding: 6px 9px; } .orbit .leader { width: 84px; } }
+
+    @media (max-width: 900px) {
+      section.hero { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
-  <p id="status" role="status" aria-live="polite">채팅에 연결하는 중입니다...</p>
-  <div id="webchat" style="height: 600px"></div>
+  <div class="preview-note">🎁 진짜 디자인은 내 github.io 주소에서 열려요</div>
+
+  <header class="nav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span data-copy="name">AI Creative Agent Team</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features">기능</a>
+      <a href="#how">작동 방식</a>
+      <a href="#design">결과물 디자인</a>
+    </div>
+    <button class="nav-cta" onclick="scrollToChat()">지금 써 보기</button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow" data-copy="eyebrow">Multi-Agent AI Studio</span>
+      <h1 class="hero-title" data-copy="title">한 줄의 아이디어, <em>다섯 개의 결과물</em></h1>
+      <p class="hero-lead" data-copy="lead">팀장 에이전트가 전문가 다섯에게 일을 나눠, 발표자료부터 예산 분석까지 한 번에 만들어 드려요.</p>
+      <div class="hero-meta">
+        <span>Microsoft Copilot</span> · <span>Claude Sonnet</span> · <span>PowerPoint</span> · <span>Word</span> · <span>Excel</span>
+      </div>
+    </div>
+
+    <section class="chat-card" id="chatCard">
+      <div class="chat-bar">
+        <div class="chat-status">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="connectionStatus">팀을 부르는 중…</span>
+        </div>
+        <button class="chat-reset" onclick="location.reload()">새 대화</button>
+      </div>
+      
+      <div id="webchat" style="height: 200px"></div>
+
+      <div class="chat-foot">
+        <div class="chips" id="chipsContainer">
+          <button class="chip" onclick="sendPrompt(this.textContent)">가을 학교 축제 기획해 줘</button>
+          <button class="chip" onclick="sendPrompt(this.textContent)">탄소중립 캠페인 홍보물 만들어 줘</button>
+          <button class="chip" onclick="sendPrompt(this.textContent)">교사 AI 연수 프로그램 제안해 줘</button>
+        </div>
+        <div class="composer" id="composer">
+          <textarea id="userInput" placeholder="무엇을 만들어 볼까요?" rows="1" onkeydown="handleKey(event)" disabled></textarea>
+          <button class="send-btn" id="sendBtn" onclick="submitMessage()" disabled>↑</button>
+        </div>
+        <div class="composer-hint">AI는 실수할 수 있어요. 중요한 내용은 확인하세요.</div>
+      </div>
+    </section>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-num">1번</div>
+      <div class="stat-label">단순한 요청</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6명</div>
+      <div class="stat-label">협업 에이전트</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8개</div>
+      <div class="stat-label">전문 매뉴얼</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5개</div>
+      <div class="stat-label">완성된 파일</div>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="section-head">
+      <span class="kicker">Features</span>
+      <h2 class="section-title">한 번의 요청으로 완성되는 5가지 결과물</h2>
+      <p class="section-sub">기획부터 디자인, 예산 검토까지 각 분야 전문 에이전트가 동시에 작업합니다.</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature">
+        <div class="feature-mock">PPT</div>
+        <h3>발표자료</h3>
+        <p>10장 내외의 체계적인 슬라이드 구성과 실전 발표용 스크립트 노트를 함께 제공합니다.</p>
+        <div class="feature-file">presentation.pptx</div>
+      </article>
+      <article class="feature">
+        <div class="feature-mock">WEB</div>
+        <h3>포스터 & 웹</h3>
+        <p>브라우저에서 바로 열어보고 인쇄하거나 PDF로 저장할 수 있는 고품질 홍보물입니다.</p>
+        <div class="feature-file">poster.html</div>
+      </article>
+      <article class="feature">
+        <div class="feature-mock">DOC</div>
+        <h3>공식 제안서</h3>
+        <p>세련된 표지와 가독성 높은 본문 레이아웃으로 즉시 제출 가능한 문서입니다.</p>
+        <div class="feature-file">proposal.docx</div>
+      </article>
+      <article class="feature">
+        <div class="feature-mock">APP</div>
+        <h3>랜딩 페이지</h3>
+        <p>소개와 신청을 동시에 받을 수 있는 반응형 웹페이지 소스코드입니다.</p>
+        <div class="feature-file">webpage.html</div>
+      </article>
+      <article class="feature">
+        <div class="feature-mock">XLS</div>
+        <h3>예산 분석</h3>
+        <p>자동 수식이 포함된 항목별 산출 내역과 시각화 차트 데이터입니다.</p>
+        <div class="feature-file">budget_analysis.xlsx</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="how" class="section">
+    <div class="section-head">
+      <span class="kicker">Workflow</span>
+      <h2 class="section-title">전문가 팀이 일하는 방식</h2>
+      <p class="section-sub">팀장 에이전트의 조율 아래 체계적인 파이프라인으로 동작합니다.</p>
+    </div>
+    
+    <div class="orbit">
+      <div class="orbit-ring">
+        <span class="agent" style="--a:0deg"><b>ppt-agent</b></span>
+        <span class="agent" style="--a:72deg"><b>poster-agent</b></span>
+        <span class="agent" style="--a:144deg"><b>proposal-agent</b></span>
+        <span class="agent" style="--a:216deg"><b>webpage-agent</b></span>
+        <span class="agent" style="--a:288deg"><b>budget-agent</b></span>
+      </div>
+      <div class="leader">팀장</div>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <h3>브리프 기획</h3>
+        <p>요청 사항을 분석해 한 장짜리 핵심 기획서와 최적의 컬러 테마를 정의합니다.</p>
+      </li>
+      <li>
+        <h3>예산 산정</h3>
+        <p>표준 단가 기준표를 바탕으로 모든 항목의 금액과 합계 기준을 먼저 잡습니다.</p>
+      </li>
+      <li>
+        <h3>원고 집필</h3>
+        <p>공통 브리프를 공유한 상태에서 각 분야 전문가들이 동시에 원고를 작성합니다.</p>
+      </li>
+      <li>
+        <h3>파일 패키징</h3>
+        <p>디자인 규칙과 서식에 맞춰 5가지 전문 파일을 완벽하게 생성해 전달합니다.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="design" class="section">
+    <div class="section-head">
+      <span class="kicker">Themes</span>
+      <h2 class="section-title">상황별 맞춤 디자인 테마</h2>
+      <p class="section-sub">주제와 목적에 따라 가장 어울리는 시각적 분위기를 선택할 수 있습니다.</p>
+    </div>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #007AFF;"></div>
+        <strong>스카이</strong>
+        <p style="font-size:12px; color:var(--muted);">교육 및 일반 행사</p>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #FF2E93;"></div>
+        <strong>팝</strong>
+        <p style="font-size:12px; color:var(--muted);">IT 캠페인 및 축제</p>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #0B1628;"></div>
+        <strong>네이비</strong>
+        <p style="font-size:12px; color:var(--muted);">공공 보고서 및 정책</p>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #12A150;"></div>
+        <strong>그린</strong>
+        <p style="font-size:12px; color:var(--muted);">환경 및 ESG</p>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #FF6B4A;"></div>
+        <strong>코럴</strong>
+        <p style="font-size:12px; color:var(--muted);">가족 및 복지</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prompts">
+    <div class="marquee">
+      <span>가을 학교 축제 기획해 줘</span>
+      <span>탄소중립 캠페인 홍보물 만들어 줘</span>
+      <span>교사 AI 연수 프로그램 제안해 줘</span>
+      <span>신제품 런칭 행사 기획해 줘</span>
+      <span>진로 체험 주간 운영안 짜줘</span>
+    </div>
+    <div class="marquee">
+      <span>지역 축제 홍보 패키지 만들어 줘</span>
+      <span>고객 제안 워크숍 기획해 줘</span>
+      <span>학부모 설명회 자료 준비해 줘</span>
+      <span>AI 해커톤 대회 기획해 줘</span>
+      <span>동아리 박람회 부스 제안해 줘</span>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2 class="section-title" data-copy="cta">지금 바로 AI 크리에이티브 팀과 시작해보세요</h2>
+    <button class="nav-cta" onclick="scrollToChat()">대화 시작하기</button>
+  </section>
+
+  <footer class="footer">
+    <div>AI Creative Agent Team · Copilot Studio Multi-Agent</div>
+    <div>© 2026 All Rights Reserved.</div>
+  </footer>
+
+  <button class="toast" id="toastBtn" onclick="scrollToChat()">팀이 작업 중입니다 ⚡</button>
+
   <script src="https://cdn.botframework.com/botframework-webchat/4.18.0/webchat.js"></script>
   <script>
+    const COPY = {
+      glass: { name: "AI Creative Agent", eyebrow: "Liquid Glass Studio", title: "한 줄의 아이디어, <em>빛나는 결과물</em>", lead: "유리알처럼 투명하고 세련된 감각으로 팀원들이 동시에 결과물을 빚어냅니다.", placeholder: "어떤 프로젝트를 구상하고 계신가요?", chips: ["디자인 에이전시 런칭 기획", "파스텔톤 브랜드 팝업 제안", "글래스모피즘 웹사이트 구축"], cta: "빛나는 아이디어를 지금 현실로 만드세요" },
+      swiss: { name: "AI CREATIVE TEAM", eyebrow: "SWISS GRID SYSTEM", title: "정확한 격자 위에서, <em>완벽한 결과물</em>", lead: "군더더기 없는 타이포그래피와 그리드로 압도적인 설득력을 만듭니다.", placeholder: "프로젝트 명칭을 입력하세요.", chips: ["글로벌 브랜드 북 기획", "타이포그래피 전시회 제안", "시스템 아키텍처 문서화"], cta: "엄격한 스위스 그리드로 시작하기" },
+      brutal: { name: "AI CREATIVE CREW", eyebrow: "NEO BRUTALISM", title: "지루함 타파, <em>폭발적인 크리에이티브</em>", lead: "날것의 에너지와 강력한 비주얼로 시선을 단숨에 사로잡습니다.", placeholder: "대충 말해도 찰떡같이 만들어 줌!", chips: ["B급 감성 밈 축제 기획", "핵폭탄급 신제품 런칭", "지구 정복 프로젝트 제안"], cta: "지금 바로 폭발시키기!" },
+      terminal: { name: "AI_DEV_TEAM", eyebrow: "ROOT@TERMINAL:~#", title: "명령어 한 줄로, <em>풀스택 결과물 출력</em>", lead: "개발자 친화적인 인터페이스에서 에이전트 파이프라인을 실행합니다.", placeholder: "/dev/build --project ...", chips: ["/dev/team --hackathon", "/dev/deploy --campaign", "/dev/analyze --budget"], cta: "프로세스 실행하기 (/run)" },
+      magazine: { name: "THE CREATIVE REVIEW", eyebrow: "SPECIAL EDITION · 2026", title: "한 권의 깊이 있는 잡지처럼, <em>완성도 높은 기획</em>", lead: "유서 깊은 저널의 시각 언어로 격조 높은 결과물을 발행합니다.", placeholder: "이번 호 다룰 주제를 적어주세요.", chips: ["르네상스 예술제 기획", "인문학 세미나 제안", "도시 재생 프로젝트"], cta: "창간호 구독 및 기획 시작" },
+      clay: { name: "AI 토이 팩토리", eyebrow: "CLAY 3D WORLD", title: "말랑말랑한 아이디어, <em>퐁퐁 솟아나는 결과물</em>", lead: "귀여운 에이전트 친구들과 함께 즐겁게 프로젝트를 완성해요.", placeholder: "어떤 장난감을 만들어볼까요?", chips: ["말랑 대소동 축제 기획", "귀여운 펫샵 홍보 제안", "키즈 카페 프로그램 짜줘"], cta: "말랑한 팀과 대화 시작하기" },
+      y2k: { name: "AI_TEAM.exe", eyebrow: "CYBERPUNK 2000", title: "세기말 감성 그대로, <em>디지털 레트로 결과물</em>", lead: "추억의 감성과 미래지향적 AI가 만나 폭발적인 시너지를 냅니다.", placeholder: "메시지를 입력하고 엔터!", chips: ["버추얼 아이돌 콘서트", "세이클럽 감성 커뮤니티", "사이버 아카이브 구축"], cta: "접속하기 (CONNECT)" },
+      scrapbook: { name: "손글씨 크리에이티브", eyebrow: "SCRAPBOOK NOTE", title: "메모장에 끄적인 생각, <em>정성스런 결과물</em>", lead: "알록달록 마스킹 테이프와 손글씨로 따뜻한 기획을 완성해요.", placeholder: "오늘의 아이디어를 적어보세요...", chips: ["우리들의 소풍 기획", "동네 책방 북토크 제안", "손편지 캠페인 만들기"], cta: "노장 펴고 시작하기" },
+      aurora: { name: "AURORA AI", eyebrow: "NIGHT SKY CONSOLE", title: "밤하늘의 오로라처럼, <em>신비로운 결과물</em>", lead: "고요한 몰입 속에서 영감이 가득 담긴 결과물들이 피어납니다.", placeholder: "상상의 나를 펼쳐보세요...", chips: ["별밤 음악회 기획", "우주 탐사 프로젝트 제안", "디지털 오로라 전시회"], cta: "오로라 팀 불러오기" },
+      dashboard: { name: "AgentOps Console", workspace: "WORKSPACE", title: "스마트한 대시보드, <em>프로페셔널 결과물</em>", lead: "실시간 진행 상황과 KPI를 한눈에 관리하는 협업 워크스페이스입니다.", placeholder: "작업할 업무를 입력하세요...", chips: ["분기별 실적 보고서", "OKR 달성 전략 기획", "고객 만족도 조사 분석"], cta: "워크스페이스 입장" },
+      pixel: { name: "QUEST_MASTER", eyebrow: "8-BIT RPG WORLD", title: "퀘스트 수락! <em>전설의 결과물 획득</em>", lead: "픽셀 아트 세계관 속에서 에이전트 파티원들과 모험을 떠나요.", placeholder: "퀘스트 내용을 입력하세요...", chips: ["드래곤 토벌 작전 기획", "마을 축제 퀘스트 수주", "용사 육성 프로그램"], cta: "모험 시작하기 (PRESS START)" },
+      hanji: { name: "한지 미니멀", eyebrow: "TRADITIONAL MINIMAL", title: "결과물에 담는 깊은 여백, <em>단정한 기획</em>", lead: "전통의 미감과 현대적 AI의 만남으로 격조 있는 결과물을 짓습니다.", placeholder: "마음속 생각을 적어주세요...", chips: ["전통 공예 장터 기획", "한옥스테이 홍보 제안", "문화 유산 탐방 프로그램"], cta: "정갈하게 시작하기" }
+    };
+
+    const designKey = document.documentElement.getAttribute("data-design");
+    if (designKey && COPY[designKey]) {
+      const data = COPY[designKey];
+      document.querySelectorAll("[data-copy]").forEach(el => {
+        const key = el.getAttribute("data-copy");
+        if (data[key]) el.innerHTML = data[key];
+      });
+      if (data.chips && data.chips.length) {
+        const chipsContainer = document.getElementById("chipsContainer");
+        chipsContainer.innerHTML = data.chips.map(c => `<button class="chip" onclick="sendPrompt(this.textContent)">${c}</button>`).join("");
+      }
+      const userInput = document.getElementById("userInput");
+      if (data.placeholder) userInput.placeholder = data.placeholder;
+    }
+
     const BROKER_URL = "https://dl-broker-juwon-4jt3z.azurewebsites.net/api/directlineToken";
     const SEALED = "CT8_-jLfcOp7OlW5XQzW4ws5wTnV9x0fOkLltB206CqfJmts7N0-YgAB6zGhHgB5THrg8eY0jDVDtly5mYD6rfY3shuojH97RLvJTbzTlKLEH8iFsMpiFugktTlLbaVEvXEilPufYPd8wk89FX8YrdCKHxj9YDYlHc4bjPxiQGZp1IxXXBgzs_PE2u59AG0TiQbFQOMPGVp3RykWZsH2quw2DjBI1hhBGZxMY0rBD6EhsdIwcaeu88rx_AIKU090sbgFFFOGoSbG5s4-B_aS0HNpuPW_-K2Frip3_gUCd-rqlWLqyTp9-mYnd1zTfpMqYfqUgOZt9Uu1j98KkQ53r9iMaA-L7GNanDxzATpPCokx5tiaSh2RoV6QApkro934lYisTibj43ONbPBX6W2jq2fBVaYmRGkWD6fR5OrVtVsWWe-P-dINow77D2oMtcdhsgZtgcIb_gAu0Apf_bXJnEBeqgJcffrcM9M1_iZbV9dakmy7wDMUG1VBLNGF9E1MZsyTI3SB-nONO9RynSnPXfA1hybGpbOhLOL6FAb90h9byaKIeCDb1D9bGCgBIsNG317YR3GH01NZV4qkaG1gjeVz2CvjrNbLrFT1Ji4cc_oKcsFqJZPJsWe4nT3AeyvKsHezYWZGJFkhSZA";
-    const status = document.getElementById("status");
 
-    function showError(message) {
-      status.hidden = false;
-      status.textContent = message;
+    let chatStore = null;
+    let isStarted = false;
+
+    function scrollToChat() {
+      const card = document.getElementById("chatCard");
+      window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - 88, behavior: "smooth" });
+      document.getElementById("userInput").focus({ preventScroll: true });
+    }
+
+    function startChatSession() {
+      if (isStarted) return;
+      isStarted = true;
+      document.body.classList.add("is-started");
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    function sendPrompt(text) {
+      startChatSession();
+      scrollToChat();
+      const input = document.getElementById("userInput");
+      input.value = text;
+      submitMessage();
+    }
+
+    function handleKey(e) {
+      if (e.key === "Enter" && !e.shiftKey && !e.isComposing && e.keyCode !== 229) {
+        e.preventDefault();
+        submitMessage();
+      }
+    }
+
+    function submitMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text || !chatStore) return;
+      startChatSession();
+      chatStore.dispatch({ type: "WEB_CHAT/SEND_MESSAGE", payload: { text } });
+      input.value = "";
+      document.body.classList.add("is-working");
+      document.getElementById("toastBtn").textContent = "팀이 작업 중입니다 ⚡";
     }
 
     async function connect() {
-      if (!window.WebChat ||
-          typeof WebChat.createDirectLine !== "function" ||
-          typeof WebChat.renderWebChat !== "function") {
-        showError("채팅 구성 요소를 불러오지 못했습니다. 네트워크를 확인한 뒤 새로고침해 주세요.");
+      const statusText = document.getElementById("connectionStatus");
+      const userInput = document.getElementById("userInput");
+      const sendBtn = document.getElementById("sendBtn");
+
+      if (!window.WebChat || typeof WebChat.createDirectLine !== "function") {
+        statusText.textContent = "채팅 구성 요소를 불러오지 못했습니다.";
         return;
       }
 
       let response;
       try {
-        // Keep this a simple CORS request; the broker may not support preflight.
         response = await fetch(BROKER_URL, {
           method: "POST",
           body: JSON.stringify({ sealed: SEALED })
         });
       } catch {
-        showError("서버에 연결하지 못했습니다. 네트워크와 배포 주소를 확인해 주세요.");
+        statusText.textContent = "서버에 연결하지 못했습니다.";
         return;
       }
+
       if (!response.ok) {
-        showError("서버가 연결 요청을 처리하지 못했습니다 (HTTP " + response.status + ").");
+        statusText.textContent = "서버 연결 오류 (" + response.status + ")";
         return;
       }
 
@@ -47,25 +505,67 @@
       try {
         data = await response.json();
       } catch {
-        showError("서버 응답을 읽을 수 없습니다. 잠시 후 다시 시도해 주세요.");
+        statusText.textContent = "응답을 읽을 수 없습니다.";
         return;
       }
-      if (!data || typeof data.token !== "string" || !data.token.trim()) {
-        showError("서버에서 연결 토큰을 받지 못했습니다. 암호와 배포 주소를 확인해 주세요.");
+
+      if (!data || typeof data.token !== "string") {
+        statusText.textContent = "토큰을 받지 못했습니다.";
         return;
       }
 
       try {
         const directLine = WebChat.createDirectLine({ token: data.token });
-        status.hidden = true;
+        
+        chatStore = WebChat.createStore({}, ({ dispatch }) => next => action => {
+          if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
+            document.body.classList.add("is-connected");
+            statusText.textContent = "팀과 연결되었습니다";
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+          }
+          if (action.type === "DIRECT_LINE/INCOMING_ACTIVITY") {
+            const activity = action.payload.activity;
+            if (activity && activity.from && activity.from.role !== "user") {
+              if (activity.type === "message") {
+                document.body.classList.remove("is-working");
+                document.body.classList.add("has-result");
+                document.getElementById("toastBtn").textContent = "결과가 도착했어요 ↑";
+              }
+            }
+          }
+          return next(action);
+        });
+
+        const v = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        const styleOptions = {
+          hideSendBox: true,
+          rootHeight: "100%",
+          backgroundColor: "transparent",
+          primaryFont: v("--font-body"),
+          bubbleBackground: "transparent",
+          bubbleBorderWidth: 0,
+          bubbleTextColor: v("--ink"),
+          bubbleMaxWidth: 720,
+          bubbleMinWidth: 0,
+          bubbleFromUserBackground: v("--accent-soft"),
+          bubbleFromUserTextColor: v("--ink"),
+          bubbleFromUserBorderWidth: 0,
+          bubbleFromUserBorderRadius: parseInt(v("--radius")) || 0,
+          subtle: v("--muted"),
+          accent: v("--accent")
+        };
+
+        WebChat.renderWebChat({ directLine, store: chatStore, styleOptions, locale: "ko-KR" }, document.getElementById("webchat"));
+
         directLine.postActivity({
           type: "event", name: "startConversation", from: { id: "user" }
         }).subscribe({
-          error: () => showError("첫 인사를 요청하지 못했습니다. 채팅창에 메시지를 입력해 주세요.")
+          error: () => { statusText.textContent = "첫 인사를 요청하지 못했습니다."; }
         });
-        WebChat.renderWebChat({ directLine, locale: "ko-KR" }, document.getElementById("webchat"));
+
       } catch {
-        showError("채팅을 시작하지 못했습니다. 새로고침 후 다시 시도해 주세요.");
+        statusText.textContent = "채팅을 시작하지 못했습니다.";
       }
     }
 
